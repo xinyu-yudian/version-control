@@ -45,13 +45,18 @@ trigger_keywords:
 
 ## 输出格式规则
 - 匹配输出模版：
-  1. 仅匹配/包含「检查：」：严格遵循 `references/formats-check.md` 中的模板输出
-  2. 仅匹配/包含「提交：」：严格遵循 `references/formats-push.md` 中的模板输出
-- 默认路径输出使用**相对仓库路径**，过滤无更改文件；
-- 多目录场景按目录分组输出，每组标注对应目录路径与版本控制系统；无版本仓库的目录单独输出跳过提示；
+  1. 包含「检查：」的指令（含复合指令场景）：严格遵循 `references/formats-check.md` 中的模板输出
+  2. 包含「提交：」的指令（含复合指令场景）：严格遵循 `references/formats-push.md` 中的模板输出
+- 默认路径输出使用**相对仓库路径**，过滤无任何变更的文件；重命名、权限变更等特殊变更按规则正常展示。
+- 多目录场景按目录分组输出，每组标注对应目录路径与版本控制系统；无版本仓库的目录单独输出跳过提示。
+- **Diff 展示强制规则**：
+  1. 以文件为单位聚合展示，单个文件默认仅展示一个折叠diff块，不按零散变更块拆分多个条目；
+  2. 仅当单个连续变更块（hunk）的**纯变更行数（新增行数+删除行数，不含上下文行）**超过50行时，才将该超大变更块单独拆分为子块；
+  3. 每个变更块首尾必须包含上下各5行未修改的上下文代码，文件首尾不足5行时按实际行数展示。
+  4. 行内高亮 diff 展示统一调用「统一 Diff 格式命令」的输出结果解析渲染，左右对比格式调用「批量导出前后内容命令」的输出结果解析渲染。
 - 自动区分逻辑分支加载对应命令：
-  - 检查逻辑：调用 `references/commands-git-check.md` / `references/commands-svn-check.md`
-  - 提交逻辑：调用 `references/commands-git-push.md` / `references/commands-svn-push.md`
+  - 检查逻辑：按目录所属版本控制系统，分别加载 `references/commands-git-check.md` / `references/commands-svn-check.md`
+  - 提交逻辑：按目录所属版本控制系统，分别加载 `references/commands-git-push.md` / `references/commands-svn-push.md`
 - 执行命令完成后统一解析、渲染标准化输出。
 
 ## 弹窗交互规范（仅「提交：」指令触发）

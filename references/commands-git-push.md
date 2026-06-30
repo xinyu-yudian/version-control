@@ -29,17 +29,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-## 5. 获取提交短哈希，用于结果展示
-commit_hash=$(git rev-parse --short HEAD)
 
-## 6. 推送到上游分支（兼容未设置上游分支的场景）
+## 5. 推送到上游分支（兼容未设置上游分支的场景）
 git push origin HEAD
 if [ $? -ne 0 ]; then
   echo "=== ERROR: git push 执行失败 ==="
   exit 1
 fi
 
-## 7. 输出标准化提交结果标记
+## 6. 输出标准化提交结果标记
 echo "==== COMMIT_SUCCESS ===="
 echo "COMMIT_MSG: $commit_msg"
 echo "COMMIT_HASH: $commit_hash"
