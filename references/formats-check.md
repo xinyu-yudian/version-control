@@ -31,7 +31,7 @@
 - 单个文件内多个子变更块之间间距：0.3em
 - 代码块内部通过 padding 控制内边距，取消默认外边距
 
-### 精确输出模板（必须严格遵循）
+### 精确输出模板（必须严格遵循以下模版，不额外增加任何描述）
 ```markdown
 `relative/path/to/file1.ext`
 <details style="margin: 0.5em 0 1em 0;">
