@@ -25,10 +25,16 @@
 - 删除的代码使用红色背景 `#f0939d`
 - 未修改的上下文行无背景色
 
+### 间距统一规则
+- 文件与文件之间垂直间距：1em
+- 文件标题与首个折叠块之间间距：0.5em
+- 单个文件内多个子变更块之间间距：0.3em
+- 代码块内部通过 padding 控制内边距，取消默认外边距
+
 ### 精确输出模板（必须严格遵循）
 ```markdown
 `relative/path/to/file1.ext`
-<details>
+<details style="margin: 0.5em 0 1em 0;">
 <summary>第 1 处修改</summary>
 <pre style="border: 1px solid #000000; padding: 0.5em;">
 <code>
@@ -41,7 +47,7 @@
 </pre>
 </details>
 
-<details>
+<details style="margin: 0.5em 0 1em 0;">
 <summary>第 2 处修改</summary>
 <pre style="border: 1px solid #000000; padding: 0.5em;">
 <code>
@@ -57,7 +63,7 @@
 
 
  `relative/path/to/file2.ext`
-<details>
+<details style="margin: 0.5em 0 1em 0;">
 <summary>第 1 处修改</summary>
 <pre style="border: 1px solid #000000; padding: 0.5em;">
 <code>
@@ -70,7 +76,7 @@
 </pre>
 </details>
 
-<details>
+<details style="margin: 0.5em 0 1em 0;">
 <summary>第 2 处修改</summary>
 <pre style="border: 1px solid #000000; padding: 0.5em;">
 <code>
