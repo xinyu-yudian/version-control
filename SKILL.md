@@ -1,51 +1,35 @@
 ---
-name: unsubmitted-files
-description: Use when the user asks for 未提交文件, 未提交到线上库, SVN/Git 未提交, not pushed, uncommitted files, or uses format like "未提交：目录名/路径". Lists files not yet submitted to the online repository under the specified path (default to project root if no path given), including uncommitted/untracked/staged changes, Git local commits not pushed to upstream, or SVN local changes not committed, and outputs each result file in top-bottom diff format.
+name: unsubmitted-check
+description: 
+    当用户请求中包含“未提交”时，用于直接在用户指定目录中查找未提交的文件。
+    支持单个目标为“未提交：目录”的格式，以及多个目标以中文逗号分隔的格式，如“未提交：目录1、目录2、目录3……”。
+    仅在指定的目标范围内进行检查，不会遍历父目录，也不会回退到当前工作区根目录。
+    若用户没有给出目录名，则查询当前工作区下所有未提交的文件。
 ---
 
-# Unsubmitted Files
+## 未提交的文件
+列出尚未提交到远程/在线仓库的项目文件。
 
-List project files that have not been submitted to the remote/online repository.
+## 输出格式规则
+- 严格遵循 `references/output-formats.md` 中定义的模板  
+- **默认格式**：未提交文件输出格式
+- 使用相对于仓库的路径，不要包含未更改的文件  
+- 生成批量导出命令（来自 `references/git-commands.md` 或 `references/svn-commands.md`），等待用户粘贴输出内容，然后进行解析和渲染
 
-## Output Format Rules
-- Strictly follow the template defined in `references/output-formats.md`
-- **Default format**: 未提交文件输出格式-上下对比版
-- Use repository-relative paths. Do not include unchanged files.
-- When using side-by-side diff format, you must first generate the batch export command (from `references/git-commands.md` or `references/svn-commands.md`), wait for the user to paste the output, and then parse and render it.
 
-Use repository-relative paths. Do not include unchanged files.
+## 工作流程
 
-## Workflow
-
-1. Detect the VCS from the current workspace.
-2. Collect candidate files that are not present in the online repository yet.
-3. Read current file contents for files that still exist.
-4. Output only the requested file list and code blocks, unless there is an error or ambiguity that must be explained.
+1. 检测目标目录或文件的版本控制系统。
+2. 收集尚未存在于在线仓库中的候选文件。
+3. 读取仍存在的文件的当前内容。
+4. 仅输出所请求的文件列表和代码块，除非存在必须解释的错误或歧义。
 
 ## Git
 
-Use the instructions in `references/git-commands.md` as required
+请根据需要使用 `references/git-commands.md`
 
 
 ## SVN
 
-Use the instructions in `references/svn-commands.md`  as required
+请根据需要使用 `references/svn-commands.md`
 
-
-## Reading And Formatting Code
-
-Read each existing file before output. Use the file extension to choose a Markdown fence language when obvious, such as `ts`, `tsx`, `js`, `json`, `md`, `py`, `java`, `cs`, `css`, `html`, `xml`, `yaml`, `sql`, `sh`, or `text`.
-
-For binary files or files that cannot be read as text, output:
-
-```text
-(binary or unreadable file; code omitted)
-```
-
-If there are no unsubmitted files, answer exactly:
-
-```text
-没有发现未提交到线上库的文件。
-```
-
-Do not summarize the code. Do not add extra commentary after the list.
