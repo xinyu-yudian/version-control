@@ -1,8 +1,12 @@
 # SVN 未提交文件检测命令集
+## 基础状态命令（仅列文件清单）
+输出完整状态信息，包含所有变更类别，**自动遵守 SVN 忽略规则**：
+- 忽略规则来源：目录 `svn:ignore` 属性、全局 SVN 忽略配置
+- 生效范围：仅对未纳入版本控制的文件生效；已纳入版本控制的文件，即使匹配忽略规则，其变更仍会正常检测
+- 实现说明：SVN 原生默认不输出被忽略的文件，无需额外参数；禁止添加 `--no-ignore` 参数，否则会包含被忽略文件
 
 ## 基础状态命令（仅列文件清单）
 输出完整状态信息，包含所有变更类别：
-```bash
 svn status --ignore-externals "$target_path"
 
 ## 批量导出前后内容命令
@@ -14,8 +18,7 @@ svn status --ignore-externals "$target_path"
 - __NEW_FILE__: 新增文件，无基线版本
 - __DELETED_FILE__: 已删除文件，无本地版本
 
-```bash
-# 匹配所有内容/属性变更、新增、删除、未跟踪文件，兼容含空格的文件名
+# 匹配所有内容/属性变更、新增、删除、未跟踪且未被忽略的文件，兼容含空格的文件名
 svn status --ignore-externals "$target_path" | grep -E '^[MAD? ]' | cut -c 9- | while read file; do
   echo "==== FILE_PATH: $file ====="
   echo "==== BEFORE_REMOTE ====="
@@ -27,4 +30,4 @@ svn status --ignore-externals "$target_path" | grep -E '^[MAD? ]' | cut -c 9- | 
 done
 
 ## 统一 Diff 格式命令
-svn diff --context=5 "$target_path"
+svn diff --internal-diff -x "-U5" "$target_path"

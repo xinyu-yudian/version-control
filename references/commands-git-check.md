@@ -1,15 +1,23 @@
 # Git 未提交文件检测命令集
-
 ## 基础状态命令（仅列文件清单）
-输出完整状态信息，包含所有变更类别：
-```bash
+输出完整状态信息，包含所有变更类别，**自动遵守 Git 标准忽略规则**：
+- 忽略规则来源：`.gitignore`、`.git/info/exclude`、全局 Git 忽略配置
+- 生效范围：仅对未跟踪的新增文件生效；已纳入版本跟踪的文件，即使匹配忽略规则，其变更仍会正常检测
+- 输出内容：已跟踪文件的修改/删除 + 未跟踪且未被忽略的新增文件
+
+
 # 先确定对比基准，兼容无上游分支场景
 if git rev-parse --verify @{u} >/dev/null 2>&1; then
   BASE_REF="@{u}"
 else
   BASE_REF="HEAD"
 fi
-git diff --name-only "$BASE_REF" -- "$target_path"
+
+# 合并输出所有变更文件并去重
+{
+  git diff --name-only "$BASE_REF" -- "$target_path"
+  git ls-files --others --exclude-standard -- "$target_path"
+} | sort -u
 
 ## 批量导出前后内容命令
 当需要输出「修改前/修改后」代码对比时，使用此命令一次性导出所有变更文件的仓库版本与本地版本。
@@ -20,7 +28,7 @@ git diff --name-only "$BASE_REF" -- "$target_path"
 - __NEW_FILE__: 新增文件，无基线版本
 - __DELETED_FILE__: 已删除文件，无本地版本
 
-```bash
+
 # 确定对比基准：优先用上游分支，无上游则 fallback 到本地 HEAD
 if git rev-parse --verify @{u} >/dev/null 2>&1; then
   BASE_REF="@{u}"
