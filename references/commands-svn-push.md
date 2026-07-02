@@ -38,12 +38,15 @@ fi
 revision=$(echo "$commit_output" | grep -oP 'Committed revision \K[0-9]+')
 
 ## 5. 输出标准化提交结果标记
+commit_time=$(svn info --show-item last-changed-date "$target_path" | sed 's/T/ /; s/\..*//; s/[-+][0-9]\{2\}:[0-9]\{2\}$//')
 echo "==== COMMIT_SUCCESS ===="
 echo "COMMIT_MSG: $commit_msg"
+echo "COMMIT_TIME: $commit_time"
 echo "COMMIT_REVISION: $revision"
 echo "COMMIT_FILES:"
 cat .tmp_svn_commit_files
 echo "==== SVN_COMMIT_FINISH ===="
+
 
 ## 6. 仅提交成功后清理临时文件
 rm .tmp_svn_commit_files

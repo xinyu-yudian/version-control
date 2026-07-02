@@ -18,7 +18,7 @@ svn status --ignore-externals "$target_path"
 - __NEW_FILE__: 新增文件，无基线版本
 - __DELETED_FILE__: 已删除文件，无本地版本
 
-# 匹配所有内容/属性变更、新增、删除、未跟踪且未被忽略的文件，兼容含空格的文件名
+## 匹配所有内容/属性变更、新增、删除、未跟踪且未被忽略的文件，兼容含空格的文件名
 svn status --ignore-externals "$target_path" | grep -E '^[MAD? ]' | cut -c 9- | while read file; do
   echo "==== FILE_PATH: $file ====="
   echo "==== BEFORE_REMOTE ====="
@@ -30,4 +30,5 @@ svn status --ignore-externals "$target_path" | grep -E '^[MAD? ]' | cut -c 9- | 
 done
 
 ## 统一 Diff 格式命令
-svn diff --internal-diff -x "-U5" "$target_path"
+### 输出5行上下文的统一Diff格式，使用内置Diff引擎；--force 强制输出文本diff，解决文本文件被误判为二进制的问题
+svn diff --force --internal-diff -x "-U5" "$target_path"

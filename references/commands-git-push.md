@@ -38,8 +38,10 @@ if [ $? -ne 0 ]; then
 fi
 
 ## 6. 输出标准化提交结果标记
+commit_time=$(git log -1 --format=%cd --date=format:'%Y-%m-%d %H:%M:%S')
 echo "==== COMMIT_SUCCESS ===="
 echo "COMMIT_MSG: $commit_msg"
+echo "COMMIT_TIME: $commit_time"
 echo "COMMIT_HASH: $commit_hash"
 echo "COMMIT_FILES:"
 cat .tmp_commit_files
